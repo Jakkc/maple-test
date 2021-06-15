@@ -64,30 +64,30 @@ const DisplayBalance: React.FC = () => {
 
   return (
     <Card style={{textAlign: "center"}}>
-    <Space size='small' direction="vertical" style={{ width: "100%" }}>
-        {!!balance && <Title level={4}>Your balance:</Title>}
-        <Title>{getInputText()}</Title>
-      <Input
-        onChange={e => setWalletAddress(e.target.value)}
-        value={walletAddress!}
-        placeholder="Enter ethereum address"
-      />
-      <div>
-        <Space size="small">
-          <Button
-            loading={loading}
-            disabled={isFetchButtonDisabled()}
-            onClick={fetchBalance}
-          >Get Wallet Balance</Button>
-          <Button
-            disabled={!account || walletAddress === account}
-            onClick={useConnectedWallet}
-          >Use connected wallet</Button>
-        </Space>
-      </div>
-      {!!error && <Alert message="There was an issue getting your balance. Please try again" type="error" />}
-    </Space>
-  </Card>
+      <Space size='small' direction="vertical" style={{ width: "100%" }}>
+          {!!balance && <Title level={4}>Your balance:</Title>}
+          <Title>{getInputText()}</Title>
+        <Input
+          onChange={e => setWalletAddress(e.target.value)}
+          value={walletAddress!}
+          placeholder="Enter ethereum address"
+        />
+        <div>
+          <Space size="small">
+            <Button
+              loading={loading}
+              disabled={isFetchButtonDisabled()}
+              onClick={fetchBalance}
+            >Get Wallet Balance</Button>
+            <Button
+              disabled={!account || walletAddress === account}
+              onClick={useConnectedWallet}
+            >Use connected wallet</Button>
+          </Space>
+        </div>
+        {!!error && <Alert message="There was an issue getting your balance. Please try again" type="error" />}
+      </Space>
+    </Card>
   )
 }
 
