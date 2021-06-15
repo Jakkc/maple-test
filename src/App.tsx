@@ -1,25 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
 
-function App() {
+import { Layout, Row, Col } from 'antd'
+import { Web3ReactProvider } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+
+import { ConnectWallet } from './Components/ConnectWallet'
+import DisplayBalance from './Components/DisplayBalance'
+
+const { Header, Content } = Layout;
+
+function getLibrary(provider: any): Web3Provider {
+  return new Web3Provider(provider);
+}
+
+const App: React.FC = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Layout className="app-container">
+        <Header>
+          <ConnectWallet />
+        </Header>
+        <Content>
+          <Row>
+            <Col xs={{ span: 12 }} offset={6}>
+              <DisplayBalance />
+            </Col>
+          </Row>
+        </Content>
+      </Layout>
+    </Web3ReactProvider>
   );
 }
 
