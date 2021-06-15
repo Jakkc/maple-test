@@ -3,7 +3,8 @@ import { useWeb3React } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers'
 import { formatEther } from '@ethersproject/units'
 import { utils } from 'ethers'
-import { Typography, Input, Button, Card, Space } from 'antd'
+import { Typography, Input, Button, Card, Space, Alert } from 'antd'
+import { reset } from 'yargs';
 
 const { Title } = Typography;
 
@@ -12,18 +13,25 @@ const DisplayBalance: React.FC = () => {
   const [balance, setBalance] = useState<string>()
   const [walletAddress, setWalletAddress] = useState<string>()
   const [loading, setLoading] = useState<boolean>()
+  const [error, setError] = useState<boolean>()
 
   useEffect(() => {
     if (!account) return
     setWalletAddress(account)
-    setBalance(undefined)
+    reset()
   }, [account])
 
   const fetchBalance = useCallback(async (): Promise<any> => {
     if (!library || !walletAddress) return
+    reset()
     setLoading(true)
-    const balance = await library.getBalance(walletAddress)
-    setBalance(formatEther(balance))
+    try {
+      const balance = await library.getBalance(walletAddress)
+      setBalance(formatEther(balance))
+    } catch(e) {
+      setError(true)
+    }
+
     setLoading(false)
   }, [walletAddress, library])
 
@@ -40,7 +48,12 @@ const DisplayBalance: React.FC = () => {
 
   const useConnectedWallet = (): void => {
     setWalletAddress(account!)
+    reset()
+  }
+
+  const reset = (): void => {
     setBalance(undefined)
+    setError(undefined)
   }
 
   if (!account) return (
@@ -72,6 +85,7 @@ const DisplayBalance: React.FC = () => {
           >Use connected wallet</Button>
         </Space>
       </div>
+      {!!error && <Alert message="There was an issue getting your balance. Please try again" type="error" />}
     </Space>
   </Card>
   )
